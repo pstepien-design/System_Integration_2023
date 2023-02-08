@@ -1,0 +1,5 @@
+{
+  "brand": "BMW",
+  "price": 25000,
+  "availableColors": ["black", "red", "white"]
+}

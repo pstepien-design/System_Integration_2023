@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<car>
+<brand>BMW</brand>
+<price>25000</price>
+<availableColors>
+<color>black</color>
+<color>red</color>
+<color>white</color>
+</availableColors>
+</car>
+</xml>
