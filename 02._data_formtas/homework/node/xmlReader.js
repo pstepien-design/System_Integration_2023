@@ -16,6 +16,7 @@ fs.readFile("../data/car.xml", "utf-8", (err, data) => {
           availableColors: result.car.availableColors[0].color,
         };
 
+        console.log("XML FILE");
         console.log(carObject);
       }
     });

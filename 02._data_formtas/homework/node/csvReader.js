@@ -13,6 +13,7 @@ fs.readFile("../data/car.csv", "utf-8", (err, data) => {
       carObject[key] = parsedCsv.data[1][index];
     });
 
+    console.log("CSV FILE");
     console.log(carObject);
   }
 });

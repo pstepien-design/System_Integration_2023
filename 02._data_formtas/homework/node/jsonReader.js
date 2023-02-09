@@ -9,7 +9,7 @@ fs.readFile("../data/car.json", "utf-8", (err, data) => {
       ...jsonData,
     };
 
-    console.log("\nJSON FILE");
+    console.log("JSON FILE");
     console.log(carDetails);
   }
 });

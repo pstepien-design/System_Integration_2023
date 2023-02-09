@@ -7,6 +7,7 @@ fs.readFile("../data/car.yaml", "utf-8", (err, data) => {
   } else {
     const carObject = jsYaml.load(data);
 
+    console.log("YAML FILE");
     console.log(carObject);
   }
 });
