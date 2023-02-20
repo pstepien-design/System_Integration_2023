@@ -13,3 +13,8 @@ def get_date_from_express():
     response = requests.get("http://127.0.0.1:8080/date")
     date = response.json()
     return date
+
+@app.get("/datafromsimon")
+def get_date_from_simon():
+    response = requests.get("https://8b75-195-249-146-101.eu.ngrok.io/pawel")
+    return response.json()
