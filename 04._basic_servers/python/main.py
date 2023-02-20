@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(port=5050)
 
 @app.get("/")
 def root():
