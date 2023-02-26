@@ -2,6 +2,7 @@ import express from "express";
 import * as fs from "fs";
 import Papa from "papaparse";
 import * as xml2js from "xml2js";
+import * as jsYaml from "js-yaml";
 
 const app = express();
 
@@ -107,6 +108,26 @@ app.get("/getXmlFromNode", (req, res) => {
 
 app.get("/getXmlFromPython", (req, res) => {
   fetch("http://127.0.0.1:8000/getXmlFromPython")
+    .then((response) => response.json())
+    .then((data) => res.send(data));
+});
+
+// YAML
+
+app.get("/getYamlFromNode", (req, res) => {
+  fs.readFile("../data/me.yaml", "utf-8", (err, data) => {
+    if (err) {
+      throw err;
+    } else {
+      const meObject = jsYaml.load(data);
+
+      res.send(meObject);
+    }
+  });
+});
+
+app.get("/getYamlFromPython", (req, res) => {
+  fetch("http://127.0.0.1:8000/getYamlFromPython")
     .then((response) => response.json())
     .then((data) => res.send(data));
 });

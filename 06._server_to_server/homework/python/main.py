@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from datetime import datetime
 import requests
 import csv
 import json
 import xml.etree.ElementTree as ET
+import yaml
 
 app = FastAPI()
 
@@ -93,6 +93,22 @@ def get_txt_from_python():
 @app.get("/getXmlFromNode")
 def get_xml_from_node():
     response = requests.get("http://127.0.0.1:8080/getXmlFromNode")
+    date = response.json()
+    return date
+
+# YAML
+
+@app.get("/getYamlFromPython")
+def get_yaml_from_python():
+    with open("../data/me.yaml") as file:
+
+        meObject = yaml.load(file, Loader=yaml.FullLoader)
+
+        return meObject
+
+@app.get("/getYamlFromNode")
+def get_yaml_from_node():
+    response = requests.get("http://127.0.0.1:8080/getYamlFromNode")
     date = response.json()
     return date
 
