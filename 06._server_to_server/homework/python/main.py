@@ -8,7 +8,7 @@ import yaml
 app = FastAPI()
 
 
-# CSB
+# CSV
 @app.get("/getCsvFromPython")
 def get_csv_from_python():
     with open("../data/me.csv") as file:
