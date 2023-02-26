@@ -5,7 +5,7 @@ import Papa from "papaparse";
 const app = express();
 
 app.get("/getCsvFromNode", (req, res) => {
-  fs.readFile("../data/car.csv", "utf-8", (err, data) => {
+  fs.readFile("../data/me.csv", "utf-8", (err, data) => {
     if (err) {
       throw err;
     } else {
@@ -23,7 +23,7 @@ app.get("/getCsvFromNode", (req, res) => {
 });
 
 app.get("/getCsvFromPython", (req, res) => {
-  fetch("http://127.0.0.1:8000/date")
+  fetch("http://127.0.0.1:8000/getCsvFromPython")
     .then((response) => response.json())
     .then((data) => res.send(data));
 });
