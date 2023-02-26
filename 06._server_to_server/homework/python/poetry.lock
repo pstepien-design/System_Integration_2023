@@ -159,6 +159,18 @@ files = [
 ]
 
 [[package]]
+name = "et"
+version = "0.0.2"
+description = "Simple package to phone home by sending and receiving arbitrary dictionaries via UDP  "
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "et-0.0.2-py2.py3-none-any.whl", hash = "sha256:e818df914b5a1238c423d0e0dce04eaa939ed5ec19d906952ee6d7136593f7c1"},
+    {file = "et-0.0.2.tar.gz", hash = "sha256:d9ccb5767e0b89cf1f670e88e088039cc9c0c7cf0e7949b286ee21456a511e5a"},
+]
+
+[[package]]
 name = "fastapi"
 version = "0.92.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -360,4 +372,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1926b51e8ad561c469a0cce30a69add1236031288c7ef54152647f27bcc9ab60"
+content-hash = "e5bf1ceae293365d650d1e925912c4aacbe8145e3329ae4a8fd20a6759df1dc8"

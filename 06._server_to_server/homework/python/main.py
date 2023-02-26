@@ -3,6 +3,7 @@ from datetime import datetime
 import requests
 import csv
 import json
+import xml.etree.ElementTree as ET
 
 app = FastAPI()
 
@@ -70,6 +71,28 @@ def get_txt_from_python():
 @app.get("/getTxtFromNode")
 def get_txt_from_node():
     response = requests.get("http://127.0.0.1:8080/getTxtFromNode")
+    date = response.json()
+    return date
+
+# XML
+
+@app.get("/getXmlFromPython")
+def get_txt_from_python():
+    with open("../data/me.xml") as file:
+
+        data = ET.fromstring(file.read())
+
+        meObject = {
+        "name": data.find("name").text,
+        "country": data.find("country").text,
+        "languages": [language.text for language in data.find("languages")],
+        }
+
+        return meObject
+
+@app.get("/getXmlFromNode")
+def get_xml_from_node():
+    response = requests.get("http://127.0.0.1:8080/getXmlFromNode")
     date = response.json()
     return date
 

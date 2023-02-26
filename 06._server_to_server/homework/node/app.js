@@ -1,6 +1,7 @@
 import express from "express";
 import * as fs from "fs";
 import Papa from "papaparse";
+import * as xml2js from "xml2js";
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.get("/getJsonFromPython", (req, res) => {
 });
 
 // TXT
+
 app.get("/getTxtFromNode", (req, res) => {
   fs.readFile("../data/me.txt", "utf-8", (err, data) => {
     if (err) {
@@ -75,6 +77,36 @@ app.get("/getTxtFromNode", (req, res) => {
 
 app.get("/getTxtFromPython", (req, res) => {
   fetch("http://127.0.0.1:8000/getTxtFromPython")
+    .then((response) => response.json())
+    .then((data) => res.send(data));
+});
+
+// XML
+
+app.get("/getXmlFromNode", (req, res) => {
+  fs.readFile("../data/me.xml", "utf-8", (err, data) => {
+    if (err) {
+      throw err;
+    } else {
+      xml2js.parseString(data, (err, result) => {
+        if (err) {
+          throw err;
+        } else {
+          const meObject = {
+            name: result.me.name[0],
+            country: result.me.country[0],
+            languages: result.me.languages[0].language,
+          };
+
+          res.send(meObject);
+        }
+      });
+    }
+  });
+});
+
+app.get("/getXmlFromPython", (req, res) => {
+  fetch("http://127.0.0.1:8000/getXmlFromPython")
     .then((response) => response.json())
     .then((data) => res.send(data));
 });
