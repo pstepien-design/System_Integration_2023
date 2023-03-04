@@ -1,0 +1,48 @@
+{
+    "schema": [
+        {
+            "table": "customers",
+            "columns": [
+                {
+                    "field": "id",
+                    "type": "int",
+                    "null": "NO",
+                    "key": "PRI",
+                    "extra": "auto_increment",
+                    "typeJS": "Number"
+                },
+                {
+                    "field": "name",
+                    "type": "varchar(45)",
+                    "null": "NO",
+                    "typeJS": "String"
+                },
+                {
+                    "field": "surname",
+                    "type": "varchar(45)",
+                    "null": "NO",
+                    "typeJS": "String"
+                },
+                {
+                    "field": "email",
+                    "type": "varchar(45)",
+                    "null": "NO",
+                    "key": "UNI",
+                    "typeJS": "String"
+                },
+                {
+                    "field": "phone_number",
+                    "type": "varchar(45)",
+                    "null": "NO",
+                    "typeJS": "String"
+                },
+                {
+                    "field": "origin_country",
+                    "type": "varchar(45)",
+                    "null": "YES",
+                    "typeJS": "String"
+                }
+            ]
+        }
+    ]
+}
