@@ -28,6 +28,7 @@ const items = [
  * @openapi
  * /api/items:
  *   get:
+ *     summary: Returns all items
  *     description: Get all items
  *     responses:
  *       200:
@@ -99,7 +100,8 @@ router.get("/api/items/name/:name", (req, res) => {
  * @openapi
  * /api/items:
  *   post:
- *     description: Create a new items
+ *     summary: Creates a new item
+ *     description: Create a new item
  *     parameters: []
  *     requestBody: {
  *          content: {
@@ -131,7 +133,7 @@ router.post("/api/items", (req, res) => {
  *         schema:
  *           type: integer
  *         required: true
- *         description: Name of the item to retrieve
+ *         description: Number of the item to retrieve
  *     requestBody: {
  *          content: {
  *              "application/json": {
@@ -154,6 +156,37 @@ router.put("/api/items/:id", (req, res) => {
   if (item) {
     item.name = req.body.name;
     item.price = req.body.price;
+    res.send({ data: item });
+  } else {
+    res.status(404).send({ error: "Item not found" });
+  }
+});
+
+/**
+ * @openapi
+ * /api/items/{id}:
+ *   delete:
+ *     summary: Deletes the item by id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Id (number) of the item to delete
+ *     responses:
+ *       200:
+ *         description: Returns the item that was deleted
+ *       404:
+ *         description: Item not found
+ */
+
+router.delete("/api/items/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const item = items.find((item) => item.id === id);
+  if (item) {
+    const itemIndex = items.indexOf(item);
+    items.splice(itemIndex, 1);
     res.send({ data: item });
   } else {
     res.status(404).send({ error: "Item not found" });
