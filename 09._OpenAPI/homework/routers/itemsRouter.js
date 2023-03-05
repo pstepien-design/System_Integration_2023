@@ -120,4 +120,44 @@ router.post("/api/items", (req, res) => {
   res.send({ data: item });
 });
 
+/**
+ * @openapi
+ * /api/items/{id}:
+ *   put:
+ *     summary: Change the item based on id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Name of the item to retrieve
+ *     requestBody: {
+ *          content: {
+ *              "application/json": {
+ *              schema: {
+ *                  type: "object",
+ *                  }
+ *               }
+ *           }
+ *      }
+ *     responses:
+ *       200:
+ *         description: Returns the item that was created
+ */
+router.put("/api/items/:id", (req, res) => {
+  const item = items.find((item) => {
+    if (item.id === parseInt(req.params.id)) {
+      return item;
+    }
+  });
+  if (item) {
+    item.name = req.body.name;
+    item.price = req.body.price;
+    res.send({ data: item });
+  } else {
+    res.status(404).send({ error: "Item not found" });
+  }
+});
+
 export default router;
