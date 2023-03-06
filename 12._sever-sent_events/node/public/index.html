@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server-sent event</title>
+  </head>
+  <body>
+    <div style="text-align: center"> 
+    <h1>Server-sent Event</h1>
+    <p>Status: </p><br>
+    <div id="server-sent_status"></div>
+    <p>Time: </p></body>
+    <div id="server-sent_time" ></div>
+</div>
+
+    <script>
+      const eventSource = new EventSource("/synchronize-time");
+      const serverSentTimeDiv = document.getElementById("server-sent_time");
+      const serverStatusDiv = document.getElementById("server-sent_status");
+
+
+      eventSource.addEventListener("message", (event) => {
+        serverSentTimeDiv.innerText = event.data;
+      });
+
+      eventSource.addEventListener("open", (event) => {
+        serverStatusDiv.innerText ="Connection was opened"
+      });
+
+      eventSource.addEventListener("error", (event) => {
+        if (eventSource.readyState === EventSource.CLOSED) {
+            serverStatusDiv.innerText = "Connection was lost";
+        } else if (eventSource.readyState === EventSource.CONNECTING) {
+            serverStatusDiv.innerText = "Connection is trying to reconnect";
+        }
+      });
+    </script>
+  </body>
+</html>
