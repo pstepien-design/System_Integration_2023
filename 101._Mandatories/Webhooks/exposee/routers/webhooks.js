@@ -12,6 +12,8 @@ const router = new Router();
  * @swagger
  * /webhook/register:
  *   post:
+ *     tags:
+ *        [Webhooks]
  *     summary: Register a webhook URL
  *     description: Use this endpoint to register your url, so it is called whenever the payment is completed or processed
  *     requestBody:
@@ -58,7 +60,9 @@ router.post("/webhook/register", (req, res) => {
         res.status(500).send({ message: "Webhook registration failed" })
       );
   } else {
-    res.status(500).send({ message: "Webhook registration failed" });
+    res.status(500).send({
+      message: "Webhook registration failed. You need to provide the url",
+    });
   }
 });
 
@@ -66,6 +70,8 @@ router.post("/webhook/register", (req, res) => {
  * @swagger
  * /webhook/unregister:
  *   post:
+ *     tags:
+ *       [Webhooks]
  *     summary: Unregister a webhook URL
  *     description: Use this endpoint to unregister your url. The url will not be called if the payment is completed or processed
  *     requestBody:
@@ -111,6 +117,10 @@ router.post("/webhook/unregister", (req, res) => {
       .catch(() =>
         res.status(500).send({ message: "Webhook could not be unregistered" })
       );
+  } else {
+    res.status(500).send({
+      message: "Webhook could not be unregistered. You need to provide the url",
+    });
   }
 });
 
@@ -118,6 +128,8 @@ router.post("/webhook/unregister", (req, res) => {
  * @swagger
  * /webhook/ping:
  *   post:
+ *     tags:
+ *      [Webhooks]
  *     summary: Ping a webhook URL
  *     description: Use this endpoint to test whether your url is registered or not. If it is registered, the url will be called with a message. If not, you will receive an error message.
  *     requestBody:
@@ -156,18 +168,31 @@ router.post("/webhook/ping", async (req, res) => {
   );
 
   if (isUrlRegistered) {
-    fetch(requestedUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: `${requestedUrl} is registered for payment webhooks`,
-      }),
-    });
-    res.send({});
+    try {
+      const response = await fetch(requestedUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `${requestedUrl} is registered for payment webhooks`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send POST request to ${requestedUrl}`);
+      }
+
+      res.send({});
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: `Failed to send POST request to ${requestedUrl}` });
+    }
   } else {
-    res.send({ message: `${requestedUrl} is not registered for the webhooks` });
+    res.send({
+      message: `${requestedUrl} is not registered for payment webhooks`,
+    });
   }
 });
 
