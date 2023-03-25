@@ -2,11 +2,23 @@ import * as fs from "fs";
 
 export const addUrlToFile = (url) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile("./registeredUrls.txt", url, (err) => {
+    fs.readFile("./registeredUrls.txt", (err, registeredUrls) => {
       if (err) {
         return reject(err);
       }
-      return resolve();
+      const doesUrlExist = registeredUrls
+        .toString()
+        .split("\n")
+        .filter(Boolean);
+      if (doesUrlExist.includes(url)) {
+        return resolve();
+      }
+      fs.appendFile("./registeredUrls.txt", `${url}\n`, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve();
+      });
     });
   });
 };
@@ -39,7 +51,9 @@ export const getAllRegisteredUrls = () => {
         if (err) {
           return reject(err);
         }
-        const registeredUrls = registeredUrlsFromFile.split("\n");
+        const registeredUrls = registeredUrlsFromFile
+          .split("\n")
+          .filter(Boolean);
         return resolve(registeredUrls);
       }
     );

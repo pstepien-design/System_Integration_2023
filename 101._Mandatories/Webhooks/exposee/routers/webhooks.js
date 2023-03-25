@@ -163,6 +163,8 @@ router.post("/webhook/ping", async (req, res) => {
   const allRegisteredUrls = await getAllRegisteredUrls();
   const requestedUrl = req.body.urlToRegister;
 
+  console.log("allRegisteredUrls", allRegisteredUrls);
+
   const isUrlRegistered = allRegisteredUrls.find(
     (registeredUrl) => registeredUrl === requestedUrl
   );
