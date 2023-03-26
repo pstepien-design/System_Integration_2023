@@ -1,8 +1,8 @@
 import * as fs from "fs";
 
-export const addUrlToFile = (url) => {
+export const addUrlToFile = (url, filename) => {
   return new Promise((resolve, reject) => {
-    fs.readFile("./registeredUrls.txt", (err, registeredUrls) => {
+    fs.readFile(`./${filename}.txt`, (err, registeredUrls) => {
       if (err) {
         return reject(err);
       }
@@ -13,7 +13,7 @@ export const addUrlToFile = (url) => {
       if (doesUrlExist.includes(url)) {
         return resolve();
       }
-      fs.appendFile("./registeredUrls.txt", `${url}\n`, (err) => {
+      fs.appendFile(`./${filename}.txt`, `${url}\n`, (err) => {
         if (err) {
           return reject(err);
         }
@@ -23,16 +23,16 @@ export const addUrlToFile = (url) => {
   });
 };
 
-export const removeUrlFromFile = (urlToDelete) => {
+export const removeUrlFromFile = (urlToDelete, filename) => {
   return new Promise((resolve, reject) => {
-    fs.readFile("./registeredUrls.txt", "utf8", (err, registeredUrls) => {
+    fs.readFile(`./${filename}.txt`, "utf8", (err, registeredUrls) => {
       if (err) {
         return reject(err);
       }
       const splittedUrls = registeredUrls.split("\n");
       console.log(splittedUrls);
       const updatedUrls = splittedUrls.filter((url) => url !== urlToDelete);
-      fs.writeFile("registeredUrls.txt", updatedUrls.join("\n"), (err) => {
+      fs.writeFile(`./${filename}.txt`, updatedUrls.join("\n"), (err) => {
         if (err) {
           return reject(err);
         }
@@ -42,20 +42,14 @@ export const removeUrlFromFile = (urlToDelete) => {
   });
 };
 
-export const getAllRegisteredUrls = () => {
+export const getAllRegisteredUrls = (filename) => {
   return new Promise((resolve, reject) => {
-    fs.readFile(
-      "./registeredUrls.txt",
-      "utf8",
-      (err, registeredUrlsFromFile) => {
-        if (err) {
-          return reject(err);
-        }
-        const registeredUrls = registeredUrlsFromFile
-          .split("\n")
-          .filter(Boolean);
-        return resolve(registeredUrls);
+    fs.readFile(`./${filename}.txt`, "utf8", (err, registeredUrlsFromFile) => {
+      if (err) {
+        return reject(err);
       }
-    );
+      const registeredUrls = registeredUrlsFromFile.split("\n").filter(Boolean);
+      return resolve(registeredUrls);
+    });
   });
 };

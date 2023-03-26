@@ -10,12 +10,12 @@ const router = new Router();
 
 /**
  * @swagger
- * /webhook/register:
+ * /webhook/payment-processed/register:
  *   post:
  *     tags:
- *        [Webhooks]
- *     summary: Register a webhook URL
- *     description: Use this endpoint to register your url, so it is called whenever the payment is completed or processed
+ *        [Payment Processed Webhook]
+ *     summary: Register URL for payment processed webhook
+ *     description: Use this endpoint to register your url, so it is called whenever the payment processed
  *     requestBody:
  *       required: true
  *       content:
@@ -27,7 +27,7 @@ const router = new Router();
  *                 type: string
  *     responses:
  *       200:
- *         description: Webhook registration succeeded
+ *         description: Webhook registration for payment processed succeeded
  *         content:
  *           application/json:
  *             schema:
@@ -37,7 +37,7 @@ const router = new Router();
  *                   type: string
  *                   description: Success message
  *       500:
- *         description: Webhook registration failed
+ *         description: Webhook registration for payment processed failed
  *         content:
  *           application/json:
  *             schema:
@@ -47,33 +47,36 @@ const router = new Router();
  *                   type: string
  *                   description: Error message
  */
-router.post("/webhook/register", (req, res) => {
+router.post("/webhook/payment-processed/register", (req, res) => {
   const url = req.body.urlToRegister;
   if (url) {
-    addUrlToFile(url)
+    addUrlToFile(url, "paymentProcessedUrls")
       .then(() =>
         res.status(200).send({
-          message: `Webhook registration succeeded for url: ${url}`,
+          message: `Webhook registration for payment processed succeeded for url: ${url}`,
         })
       )
       .catch(() =>
-        res.status(500).send({ message: "Webhook registration failed" })
+        res.status(500).send({
+          message: "Webhook registration for payment processed failed",
+        })
       );
   } else {
     res.status(500).send({
-      message: "Webhook registration failed. You need to provide the url",
+      message:
+        "Webhook registration for payment processed failed. You need to provide the url",
     });
   }
 });
 
 /**
  * @swagger
- * /webhook/unregister:
+ * /webhook/payment-processed/unregister:
  *   post:
  *     tags:
- *       [Webhooks]
- *     summary: Unregister a webhook URL
- *     description: Use this endpoint to unregister your url. The url will not be called if the payment is completed or processed
+ *       [Payment Processed Webhook]
+ *     summary: Unregister URL for payment processed webhook
+ *     description: Use this endpoint to unregister your url. The url will not be called if the payment is processed
  *     requestBody:
  *       required: true
  *       content:
@@ -85,7 +88,7 @@ router.post("/webhook/register", (req, res) => {
  *                 type: string
  *     responses:
  *       200:
- *         description: Webhook has been successfully unregistered
+ *         description: Webhook for payment processed has been successfully unregistered
  *         content:
  *           application/json:
  *             schema:
@@ -95,7 +98,7 @@ router.post("/webhook/register", (req, res) => {
  *                   type: string
  *                   description: Success message
  *       500:
- *         description: Webhook could not be unregistered
+ *         description: Webhook for payment processed could not be unregistered
  *         content:
  *           application/json:
  *             schema:
@@ -105,33 +108,36 @@ router.post("/webhook/register", (req, res) => {
  *                   type: string
  *                   description: Error message
  */
-router.post("/webhook/unregister", (req, res) => {
+router.post("/webhook/payment-processed/unregister", (req, res) => {
   const url = req.body.urlToRegister;
   if (url) {
-    removeUrlFromFile(url)
+    removeUrlFromFile(url, "paymentProcessedUrls")
       .then(() =>
         res.status(200).send({
-          message: `Webhook has been successfully unregistered for url: ${url}`,
+          message: `Webhook  for payment processed has been successfully unregistered for url: ${url}`,
         })
       )
       .catch(() =>
-        res.status(500).send({ message: "Webhook could not be unregistered" })
+        res.status(500).send({
+          message: "Webhook for payment processed could not be unregistered",
+        })
       );
   } else {
     res.status(500).send({
-      message: "Webhook could not be unregistered. You need to provide the url",
+      message:
+        "Webhook for payment processed could not be unregistered. You need to provide the url",
     });
   }
 });
 
 /**
  * @swagger
- * /webhook/ping:
+ * /webhook/payment-processed/ping:
  *   post:
  *     tags:
- *      [Webhooks]
- *     summary: Ping a webhook URL
- *     description: Use this endpoint to test whether your url is registered or not. If it is registered, the url will be called with a message. If not, you will receive an error message.
+ *      [Payment Processed Webhook]
+ *     summary: Ping a payment processed webhook URL
+ *     description: Use this endpoint to test whether your url is registered for payment processed or not. If it is registered, the url will be called with a message. If not, you will receive an error message.
  *     requestBody:
  *       required: true
  *       content:
@@ -143,7 +149,7 @@ router.post("/webhook/unregister", (req, res) => {
  *                 type: string
  *     responses:
  *       200:
- *         description: Webhook is registered for payment
+ *         description: URL is registered for payment processed webhook
  *         content:
  *           application/json:
  *             schema:
@@ -153,7 +159,7 @@ router.post("/webhook/unregister", (req, res) => {
  *                   type: string
  *                   description: Success message
  *       400:
- *         description: URL is not registered for webhooks
+ *         description: URL is not registered for payment processed webhook
  *         content:
  *           application/json:
  *             schema:
@@ -163,8 +169,8 @@ router.post("/webhook/unregister", (req, res) => {
  *                   type: string
  *                   description: Error message
  */
-router.post("/webhook/ping", async (req, res) => {
-  const allRegisteredUrls = await getAllRegisteredUrls();
+router.post("/webhook/payment-processed/ping", async (req, res) => {
+  const allRegisteredUrls = await getAllRegisteredUrls("paymentProcessedUrls");
   const requestedUrl = req.body.urlToRegister;
 
   const isUrlRegistered = allRegisteredUrls.find(
@@ -179,7 +185,7 @@ router.post("/webhook/ping", async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: `${requestedUrl} is registered for payment webhooks`,
+          message: `${requestedUrl} is registered for payment processed webhook`,
         }),
       });
 
@@ -188,7 +194,7 @@ router.post("/webhook/ping", async (req, res) => {
       }
 
       res.send({
-        message: `${requestedUrl} is registered and request has been sent`,
+        message: `${requestedUrl} is registered for payment processed and request has been sent`,
       });
     } catch (error) {
       res
@@ -197,7 +203,207 @@ router.post("/webhook/ping", async (req, res) => {
     }
   } else {
     res.send({
-      message: `${requestedUrl} is not registered for payment webhooks`,
+      message: `${requestedUrl} is not registered for for payment processed webhook`,
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /webhook/payment-completed/register:
+ *   post:
+ *     tags:
+ *        [Payment Completed Webhook]
+ *     summary: Register URL for payment completed webhook
+ *     description: Use this endpoint to register your url, so it is called whenever the payment completed
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               urlToRegister:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Webhook registration for payment completed succeeded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *       500:
+ *         description: Webhook registration for payment completed failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ */
+router.post("/webhook/payment-completed/register", (req, res) => {
+  const url = req.body.urlToRegister;
+  if (url) {
+    addUrlToFile(url, "paymentCompletedUrls")
+      .then(() =>
+        res.status(200).send({
+          message: `Webhook registration for payment completed succeeded for url: ${url}`,
+        })
+      )
+      .catch(() =>
+        res.status(500).send({
+          message: "Webhook registration for payment completed failed",
+        })
+      );
+  } else {
+    res.status(500).send({
+      message:
+        "Webhook registration for payment completed failed. You need to provide the url",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /webhook/payment-completed/unregister:
+ *   post:
+ *     tags:
+ *       [Payment Completed Webhook]
+ *     summary: Unregister URL for payment completed webhook
+ *     description: Use this endpoint to unregister your url. The url will not be called if the payment is completed
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               urlToRegister:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Webhook for payment completed has been successfully unregistered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *       500:
+ *         description: Webhook for payment completed could not be unregistered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ */
+router.post("/webhook/payment-completed/unregister", (req, res) => {
+  const url = req.body.urlToRegister;
+  if (url) {
+    removeUrlFromFile(url, "paymentCompletedUrls")
+      .then(() =>
+        res.status(200).send({
+          message: `Webhook  for payment completed has been successfully unregistered for url: ${url}`,
+        })
+      )
+      .catch(() =>
+        res.status(500).send({
+          message: "Webhook for payment completed could not be unregistered",
+        })
+      );
+  } else {
+    res.status(500).send({
+      message:
+        "Webhook for payment completed could not be unregistered. You need to provide the url",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /webhook/payment-completed/ping:
+ *   post:
+ *     tags:
+ *      [Payment Completed Webhook]
+ *     summary: Ping a payment completed webhook URL
+ *     description: Use this endpoint to test whether your url is registered for payment completed or not. If it is registered, the url will be called with a message. If not, you will receive an error message.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               urlToRegister:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: URL is registered for payment completed webhook
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *       400:
+ *         description: URL is not registered for payment completed webhook
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message
+ */
+router.post("/webhook/payment-completed/ping", async (req, res) => {
+  const allRegisteredUrls = await getAllRegisteredUrls("paymentCompletedUrls");
+  const requestedUrl = req.body.urlToRegister;
+
+  const isUrlRegistered = allRegisteredUrls.find(
+    (registeredUrl) => registeredUrl === requestedUrl
+  );
+
+  if (isUrlRegistered) {
+    try {
+      const response = await fetch(requestedUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `${requestedUrl} is registered for payment completed webhook`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send POST request to ${requestedUrl}`);
+      }
+
+      res.send({
+        message: `${requestedUrl} is registered for payment completed and request has been sent`,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: `Failed to send POST request to ${requestedUrl}` });
+    }
+  } else {
+    res.send({
+      message: `${requestedUrl} is not registered for for payment completed webhook`,
     });
   }
 });
