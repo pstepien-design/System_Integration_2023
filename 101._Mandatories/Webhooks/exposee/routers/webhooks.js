@@ -148,6 +148,10 @@ router.post("/webhook/unregister", (req, res) => {
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
  *       400:
  *         description: URL is not registered for webhooks
  *         content:
@@ -162,8 +166,6 @@ router.post("/webhook/unregister", (req, res) => {
 router.post("/webhook/ping", async (req, res) => {
   const allRegisteredUrls = await getAllRegisteredUrls();
   const requestedUrl = req.body.urlToRegister;
-
-  console.log("allRegisteredUrls", allRegisteredUrls);
 
   const isUrlRegistered = allRegisteredUrls.find(
     (registeredUrl) => registeredUrl === requestedUrl
@@ -185,7 +187,9 @@ router.post("/webhook/ping", async (req, res) => {
         throw new Error(`Failed to send POST request to ${requestedUrl}`);
       }
 
-      res.send({});
+      res.send({
+        message: `${requestedUrl} is registered and request has been sent`,
+      });
     } catch (error) {
       res
         .status(500)
