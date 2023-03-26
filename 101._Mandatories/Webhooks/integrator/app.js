@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 const app = express();
 app.use(express.json());
 
-const WEBHOOK_URL = "/test/webhook";
+const WEBHOOK_URL = "/webhooks";
 const PORT = 8081;
 
 app.post(WEBHOOK_URL, (req, res) => {
