@@ -30,7 +30,6 @@ export const removeUrlFromFile = (urlToDelete, filename) => {
         return reject(err);
       }
       const splittedUrls = registeredUrls.split("\n");
-      console.log(splittedUrls);
       const updatedUrls = splittedUrls.filter((url) => url !== urlToDelete);
       fs.writeFile(`./${filename}.txt`, updatedUrls.join("\n"), (err) => {
         if (err) {
