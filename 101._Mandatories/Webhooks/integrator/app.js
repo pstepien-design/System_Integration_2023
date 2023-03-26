@@ -4,11 +4,12 @@ import fetch from "node-fetch";
 const app = express();
 app.use(express.json());
 
-const WEBHOOK_URL = "http://127.0.0.1:8081/webhooks";
-const WEBHOOK_SERVER = "https://pstepien-webhooks-si2023.onrender.com";
+const INTEGRATOR_WEBHOOKS_URL = "/webhook";
+const INTEGRATOR_URL = `https://9802-85-24-120-250.eu.ngrok.io${INTEGRATOR_WEBHOOKS_URL}`;
+const WEBHOOK_SERVER = "http://127.0.0.1:8080";
 const PORT = 8081;
 
-app.post(WEBHOOK_URL, (req, res) => {
+app.post(`${INTEGRATOR_WEBHOOKS_URL}`, (req, res) => {
   const message = req.body.message;
   console.log(message);
   res.send({ message: message });
@@ -56,7 +57,7 @@ app.listen(PORT, () =>
 
 const pingPaymentProcessed = () => {
   const body = {
-    urlToRegister: WEBHOOK_URL,
+    urlToRegister: INTEGRATOR_URL,
   };
 
   return fetch(`${WEBHOOK_SERVER}/webhook/payment-processed/ping`, {
@@ -70,7 +71,7 @@ const pingPaymentProcessed = () => {
 
 const pingPaymentCompleted = () => {
   const body = {
-    urlToRegister: WEBHOOK_URL,
+    urlToRegister: INTEGRATOR_URL,
   };
 
   return fetch(`${WEBHOOK_SERVER}/webhook/payment-completed/ping`, {
@@ -84,10 +85,8 @@ const pingPaymentCompleted = () => {
 
 const registerWebhookPaymentProcessed = () => {
   const body = {
-    urlToRegister: WEBHOOK_URL,
+    urlToRegister: INTEGRATOR_URL,
   };
-
-  console.log(body);
 
   return fetch(`${WEBHOOK_SERVER}/webhook/payment-processed/register`, {
     method: "POST",
@@ -100,7 +99,7 @@ const registerWebhookPaymentProcessed = () => {
 
 const registerWebhookPaymentCompleted = () => {
   const body = {
-    urlToRegister: WEBHOOK_URL,
+    urlToRegister: INTEGRATOR_URL,
   };
 
   console.log(body);
@@ -116,7 +115,7 @@ const registerWebhookPaymentCompleted = () => {
 
 const unregisterWebhookPaymentProcessed = () => {
   const body = {
-    urlToRegister: WEBHOOK_URL,
+    urlToRegister: INTEGRATOR_URL,
   };
 
   return fetch(`${WEBHOOK_SERVER}/webhook/payment-processed/unregister`, {
@@ -130,7 +129,7 @@ const unregisterWebhookPaymentProcessed = () => {
 
 const unregisterWebhookPaymentCompleted = () => {
   const body = {
-    urlToRegister: WEBHOOK_URL,
+    urlToRegister: INTEGRATOR_URL,
   };
 
   return fetch(`${WEBHOOK_SERVER}/webhook/payment-completed/unregister`, {
