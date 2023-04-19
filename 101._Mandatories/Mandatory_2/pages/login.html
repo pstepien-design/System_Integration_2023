@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <body>
+    <h1>Log in</h1>
+
+    <div id="g_id_onload"
+    data-client_id="35986844735-vd4e4jokpajtqk6s0b456atikbk45f58.apps.googleusercontent.com"
+    data-context="signin"
+    data-ux_mode="popup"
+    data-callback="logIn"
+    data-itp_support="true">
+</div>
+
+<div class="g_id_signin"
+    data-type="standard"
+    data-shape="rectangular"
+    data-theme="outline"
+    data-text="signup_with"
+    data-size="large"
+    data-locale="en-GB"
+    data-logo_alignment="left">
+</div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script type="text/javascript">
+      function logIn(googleUser) {
+              alert('Logged in successfully!');
+      }
+</script>
+    </form>
+  </body>
+</html>
