@@ -7,7 +7,7 @@ with open("../data/car.txt") as file:
   carObject = {
     "brand": brand,
     "price": price,
-    "availableColors": availableColors,
+    "availableColors": availableColors.split(',')
   }
 
   print('TXT FILE')

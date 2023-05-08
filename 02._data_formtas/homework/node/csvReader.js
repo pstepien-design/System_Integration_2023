@@ -5,7 +5,7 @@ fs.readFile("../data/car.csv", "utf-8", (err, data) => {
   if (err) {
     throw err;
   } else {
-    const parsedCsv = Papa.parse(data, { headers: true });
+    const parsedCsv = Papa.parse(data, { headers: false });
 
     const carObject = {};
 

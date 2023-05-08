@@ -3,6 +3,7 @@ with open("../data/car.csv") as file:
 
   data = csv.DictReader(file)
 
+
   carObject = [
         {
             "brand": row["brand"],
@@ -13,4 +14,4 @@ with open("../data/car.csv") as file:
     ]
       
   print('CSV FILE')
-  print(carObject)
+  print(carObject[0])
