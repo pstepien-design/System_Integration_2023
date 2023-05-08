@@ -9,6 +9,6 @@ pubsub.subscribe('myChannel')
 for message in pubsub.listen():
     print(message)
 
-    if message == b'quit':
+    if message['data'] == b'quit':
         break
 
