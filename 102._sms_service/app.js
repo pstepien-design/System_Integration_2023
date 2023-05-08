@@ -11,12 +11,15 @@ const __dirname = path.resolve();
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.post("/send_sms", async (req, res) => {
+  console.log(req.body);
+
   const API_KEY = process.env.SERVICE_API_KEY;
   const phoneNumber = req.body.phone_number;
   const message = req.body.message;
@@ -39,6 +42,8 @@ app.post("/send_sms", async (req, res) => {
       console.log(error);
       res.status(500).send("Error sending SMS");
     }
+  } else {
+    res.send("Please provide phone number and message");
   }
 });
 
