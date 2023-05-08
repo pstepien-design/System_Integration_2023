@@ -18,8 +18,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/send_sms", async (req, res) => {
-  console.log(req.body);
-
   const API_KEY = process.env.SERVICE_API_KEY;
   const phoneNumber = req.body.phone_number;
   const message = req.body.message;
