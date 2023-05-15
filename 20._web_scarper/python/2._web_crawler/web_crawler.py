@@ -12,15 +12,11 @@ def get_parsed_wiki_page(endpoint):
     html_page = requests.get(BASE_URL + endpoint).text
     return BeautifulSoup(html_page, "lxml")
 
-# Rules for internal Wikipedia links:
-# They reside within the div with the id set to bodyContent
-# The URLs do not contain colons
-# The URLs begin with /wiki/
+
 def get_internal_wiki_link_tags(parsed_page):
     return parsed_page.find('div', { "id": "bodyContent" }).find_all('a', href=re.compile("^(/wiki/)((?!:).)*$"))    
 
 def add_tags_in_visiting_queue(link_tags):
-    # if no links were found in an article
     if link_tags is None:
         return
 
